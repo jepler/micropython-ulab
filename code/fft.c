@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Zoltán Vörös
+ * Copyright (c) 2019-2020 Zoltán Vörös
 */
     
 #include <math.h>
@@ -16,6 +16,7 @@
 #include "py/binary.h"
 #include "py/obj.h"
 #include "py/objarray.h"
+#include "compat.h"
 #include "ndarray.h"
 #include "fft.h"
 

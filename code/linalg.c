@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Zoltán Vörös
+ * Copyright (c) 2019-2020 Zoltán Vörös
 */
     
 #include <stdlib.h>
@@ -14,6 +14,7 @@
 #include "py/obj.h"
 #include "py/runtime.h"
 #include "py/misc.h"
+#include "compat.h"
 #include "linalg.h"
 
 mp_obj_t linalg_transpose(mp_obj_t self_in) {
@@ -72,8 +73,8 @@ mp_obj_t linalg_reshape(mp_obj_t self_in, mp_obj_t shape) {
 
 mp_obj_t linalg_size(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_, MP_ARG_REQUIRED | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_PTR(&mp_const_none_obj) } },
-        { MP_QSTR_axis, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_PTR(&mp_const_none_obj)} },
+        { MP_QSTR_, MP_ARG_REQUIRED | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_NONE } },
+        { MP_QSTR_axis, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_NONE } },
     };
 
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
@@ -203,7 +204,7 @@ mp_obj_t linalg_dot(mp_obj_t _m1, mp_obj_t _m2) {
                 v2 = ndarray_get_float_value(m2->array->items, m2->array->typecode, k*m2->n+j);
                 sum += v1 * v2;
             }
-            outdata[i*m1->m+j] = sum;
+            outdata[j*m1->m+i] = sum;
         }
     }
     return MP_OBJ_FROM_PTR(out);
@@ -254,7 +255,7 @@ mp_obj_t linalg_ones(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args)
 mp_obj_t linalg_eye(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_, MP_ARG_REQUIRED | MP_ARG_INT, {.u_int = 0} },
-        { MP_QSTR_M, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_PTR(&mp_const_none_obj) } },
+        { MP_QSTR_M, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_NONE } },
         { MP_QSTR_k, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },        
         { MP_QSTR_dtype, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = NDARRAY_FLOAT} },
     };
