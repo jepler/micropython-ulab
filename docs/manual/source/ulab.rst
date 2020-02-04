@@ -1041,10 +1041,6 @@ take the following snippet from the micropython manual:
             return result
         return new_func
 
-.. parsed-literal::
-
-    
-
 
 .. code::
         
@@ -2047,6 +2043,7 @@ spaced numbers between 0, and two pi, and sort them:
     print('b: ', b)
     sort_time(b)
     print('\nb sorted:\n', b)
+
 argsort
 -------
 
@@ -2981,11 +2978,10 @@ By combining the two observations above, if you place the first signal,
 combined signal, then the Fourier transforms of the two components can
 be recovered as
 
-:raw-latex:`\begin{eqnarray}
-Y_1(k) &=& \frac{1}{2}\left(Y(k) + Y^*(N-k)\right)
-\\
-Y_2(k) &=& -\frac{i}{2}\left(Y(k) - Y^*(N-k)\right)
-\end{eqnarray}` where :math:`N` is the length of :math:`y_1`, and
+| :math:`Y_1(k) = \frac{1}{2}\left(Y(k) + Y^*(N-k)\right)`
+| :math:`Y_2(k) = -\frac{i}{2}\left(Y(k) - Y^*(N-k)\right)`
+
+where :math:`N` is the length of :math:`y_1`, and
 :math:`Y_1, Y_2`, and :math:`Y`, respectively, are the Fourier
 transforms of :math:`y_1, y_2`, and :math:`y = y_1 + iy_2`.
 
