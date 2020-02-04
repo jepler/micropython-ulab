@@ -65,13 +65,13 @@ void ndarray_print_row(const mp_print_t *print, mp_obj_array_t *data, size_t n0,
     mp_print_str(print, "[");
     if(n < PRINT_MAX) { // if the array is short, print everything
         mp_obj_print_helper(print, mp_binary_get_val_array(data->typecode, data->items, n0), PRINT_REPR);
-        for(i=1; i<n; i++) {
+        for(size_t i=1; i<n; i++) {
             mp_print_str(print, ", ");
             mp_obj_print_helper(print, mp_binary_get_val_array(data->typecode, data->items, n0+i), PRINT_REPR);
         }
     } else {
         mp_obj_print_helper(print, mp_binary_get_val_array(data->typecode, data->items, n0), PRINT_REPR);
-        for(i=1; i<3; i++) {
+        for(size_t i=1; i<3; i++) {
             mp_print_str(print, ", ");
             mp_obj_print_helper(print, mp_binary_get_val_array(data->typecode, data->items, n0+i), PRINT_REPR);
         }
