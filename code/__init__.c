@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019-2020 Zoltán Vörös
+ * Copyright (c) 2019 Zoltán Vörös
 */
     
 #include <math.h>
@@ -17,15 +17,21 @@
 #include "py/obj.h"
 #include "py/objarray.h"
 
-#include "compat.h"
-#include "ndarray.h"
-#include "linalg.h"
-#include "vectorise.h"
-#include "poly.h"
-#include "fft.h"
-#include "numerical.h"
+#include "shared-bindings/ulab/ndarray.h"
+#include "shared-bindings/ulab/linalg.h"
+#include "shared-bindings/ulab/vectorise.h"
+#include "shared-bindings/ulab/poly.h"
+#include "shared-bindings/ulab/fft.h"
+#include "shared-bindings/ulab/numerical.h"
 
-STATIC MP_DEFINE_STR_OBJ(ulab_version_obj, "0.26.7");
+#define ULAB_VERSION 0.262
+
+typedef struct _mp_obj_float_t {
+    mp_obj_base_t base;
+    mp_float_t value;
+} mp_obj_float_t;
+
+mp_obj_float_t ulab_version = {{&mp_type_float}, ULAB_VERSION};
 
 MP_DEFINE_CONST_FUN_OBJ_1(ndarray_shape_obj, ndarray_shape);
 MP_DEFINE_CONST_FUN_OBJ_1(ndarray_rawsize_obj, ndarray_rawsize);
@@ -115,7 +121,7 @@ const mp_obj_type_t ulab_ndarray_type = {
 
 STATIC const mp_map_elem_t ulab_globals_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR___name__), MP_OBJ_NEW_QSTR(MP_QSTR_ulab) },
-    { MP_ROM_QSTR(MP_QSTR___version__), MP_ROM_PTR(&ulab_version_obj) },
+    { MP_ROM_QSTR(MP_QSTR___version__), MP_ROM_PTR(&ulab_version) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_array), (mp_obj_t)&ulab_ndarray_type },
     { MP_OBJ_NEW_QSTR(MP_QSTR_size), (mp_obj_t)&linalg_size_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_inv), (mp_obj_t)&linalg_inv_obj },

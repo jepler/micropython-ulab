@@ -15,6 +15,7 @@
 #include "py/binary.h"
 #include "py/obj.h"
 #include "py/objarray.h"
+#include "compat.h"
 #include "vectorise.h"
 
 #ifndef MP_PI
