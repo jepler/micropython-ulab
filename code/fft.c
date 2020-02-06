@@ -17,6 +17,7 @@
 #include "py/binary.h"
 #include "py/obj.h"
 #include "py/objarray.h"
+#include "compat.h"
 #include "ndarray.h"
 #include "fft.h"
 

@@ -15,6 +15,7 @@
 #include "py/obj.h"
 #include "py/runtime.h"
 #include "py/misc.h"
+#include "compat.h"
 #include "linalg.h"
 
 #if ULAB_LINALG_TRANSPOSE

@@ -17,6 +17,7 @@
 #include "py/binary.h"
 #include "py/obj.h"
 #include "py/objtuple.h"
+#include "compat.h"
 #include "ndarray.h"
 
 // This function is copied verbatim from objarray.c
@@ -165,11 +166,14 @@ STATIC uint8_t ndarray_init_helper(size_t n_args, const mp_obj_t *pos_args, mp_m
     return dtype;
 }
 
-mp_obj_t ndarray_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
-    mp_arg_check_num(n_args, n_kw, 1, 2, true);
-    mp_map_t kw_args;
-    mp_map_init_fixed_table(&kw_args, n_kw, args + n_args);
-    uint8_t dtype = ndarray_init_helper(n_args, args, &kw_args);
+mp_obj_t ndarray_make_new(const mp_obj_type_t *type, size_t n_args, const mp_obj_t *args, mp_map_t *kw_args) {
+    mp_arg_check_num(n_args, kw_args, 1, 2, true);
+    size_t n_kw = 0;
+    if (kw_args != 0) {
+        n_kw = kw_args->used;
+    }
+    mp_map_init_fixed_table(kw_args, n_kw, args + n_args);
+    uint8_t dtype = ndarray_init_helper(n_args, args, kw_args);
 
     size_t len1, len2=0, i=0;
     mp_obj_t len_in = mp_obj_len_maybe(args[0]);

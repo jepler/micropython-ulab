@@ -17,6 +17,7 @@
 #include "py/runtime.h"
 #include "py/builtin.h"
 #include "py/misc.h"
+#include "compat.h"
 #include "numerical.h"
 
 enum NUMERICAL_FUNCTION_TYPE {

@@ -15,6 +15,7 @@
 #include "py/obj.h"
 #include "py/runtime.h"
 #include "py/misc.h"
+#include "compat.h"
 #include "filter.h"
 
 #if ULAB_FILTER_CONVOLVE

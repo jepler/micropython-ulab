@@ -12,6 +12,7 @@
 #include "py/obj.h"
 #include "py/runtime.h"
 #include "py/objarray.h"
+#include "compat.h"
 #include "ndarray.h"
 #include "linalg.h"
 #include "poly.h"

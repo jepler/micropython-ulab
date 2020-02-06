@@ -19,6 +19,7 @@
 #include "py/objarray.h"
 
 #include "ulab.h"
+#include "compat.h"
 #include "ndarray.h"
 #include "linalg.h"
 #include "vectorise.h"
