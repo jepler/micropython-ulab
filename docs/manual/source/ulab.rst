@@ -1,10 +1,10 @@
 Introduction
 ============
 
-In
-https://micropython-usermod.readthedocs.io/en/latest/usermods_14.html, I
-mentioned that I have another story, for another day. The day has come,
-so here is my story.
+In the `last
+chapter <https://micropython-usermod.readthedocs.io/en/latest/usermods_15.html>`__
+of the usermod documentation, I mentioned that I have another story, for
+another day. The day has come, so here is my story.
 
 Enter ulab
 ----------
@@ -68,9 +68,11 @@ The main points of ``ulab`` are
 -  polynomial fits to numerical data
 -  fast Fourier transforms
 
-At the time of writing this manual (for version 0.26), the library adds
+At the time of writing this manual (for version 0.32), the library adds
 approximately 30 kB of extra compiled code to the micropython
-(pyboard.v.11) firmware.
+(pyboard.v.11) firmware. However, if you are tight with flash space, you
+can easily shave off a couple of kB. See the section on `customising
+ulab <#Custom_builds>`__.
 
 Resources and legal matters
 ---------------------------
@@ -143,6 +145,35 @@ can always be queried as
 
 If you find a bug, please, include this number in your report!
 
+Customising ``ulab``
+--------------------
+
+``ulab`` implements a great number of functions, and it is quite
+possible that you do not need all of them in a particular application.
+If you want to save some flash space, you can easily exclude arbitrary
+functions from the firmware. The
+`https://github.com/v923z/micropython-ulab/blob/master/code/ulab.h <ulab.h>`__
+header file contains a pre-processor flag for all functions in ``ulab``.
+The default setting is 1 for each of them, but if you change that to 0,
+the corresponding function will not be part of the compiled firmware.
+
+The first couple of lines of the file look like this
+
+.. code:: c
+
+   // vectorise (all functions) takes approx. 3 kB of flash space
+   #define ULAB_VECTORISE_ACOS (1)
+   #define ULAB_VECTORISE_ACOSH (1)
+   #define ULAB_VECTORISE_ASIN (1)
+   #define ULAB_VECTORISE_ASINH (1)
+   #define ULAB_VECTORISE_ATAN (1)
+   #define ULAB_VECTORISE_ATANH (1)
+
+In order to simplify navigation in the file, each flag begins with
+``ULAB_``, continues with the sub-module, where the function itself is
+implemented, and ends with the function’s name. Each section displays a
+hint as to how much space you can save by un-setting the flag.
+
 Basic ndarray operations
 ------------------------
 
@@ -165,8 +196,6 @@ Methods of ndarrays
 `.shape <#.shape>`__
 
 `.reshape <#.reshape>`__
-
-`.rawsize\*\* <#.rawsize>`__
 
 `.transpose <#.transpose>`__
 
@@ -395,8 +424,8 @@ Methods of ndarrays
 .shape
 ~~~~~~
 
-The ``.shape`` method returns a 2-tuple with the number of rows, and
-columns.
+The ``.shape`` method (property) returns a 2-tuple with the number of
+rows, and columns.
 
 .. code::
         
@@ -406,11 +435,11 @@ columns.
     
     a = np.array([1, 2, 3, 4], dtype=np.int8)
     print("a:\n", a)
-    print("shape of a:", a.shape())
+    print("shape of a:", a.shape)
     
     b= np.array([[1, 2], [3, 4]], dtype=np.int8)
     print("\nb:\n", b)
-    print("shape of b:", b.shape())
+    print("shape of b:", b.shape)
 
 .. parsed-literal::
 
@@ -422,6 +451,74 @@ columns.
      array([[1, 2],
     	 [3, 4]], dtype=int8)
     shape of b: (2, 2)
+    
+    
+
+
+.size
+~~~~~
+
+The ``.size`` method (property) returns an integer with the number of
+elements in the array.
+
+.. code::
+        
+    # code to be run in micropython
+    
+    import ulab as np
+    
+    a = np.array([1, 2, 3], dtype=np.int8)
+    print("a:\n", a)
+    print("size of a:", a.size)
+    
+    b= np.array([[1, 2], [3, 4]], dtype=np.int8)
+    print("\nb:\n", b)
+    print("size of b:", b.size)
+
+.. parsed-literal::
+
+    a:
+     array([1, 2, 3], dtype=int8)
+    size of a: 3
+    
+    b:
+     array([[1, 2],
+    	 [3, 4]], dtype=int8)
+    size of b: 4
+    
+    
+
+
+.itemsize
+~~~~~~~~~
+
+The ``.itemsize`` method (property) returns an integer with the siz
+enumber of elements in the array.
+
+.. code::
+        
+    # code to be run in micropython
+    
+    import ulab as np
+    
+    a = np.array([1, 2, 3], dtype=np.int8)
+    print("a:\n", a)
+    print("itemsize of a:", a.itemsize)
+    
+    b= np.array([[1, 2], [3, 4]], dtype=np.float)
+    print("\nb:\n", b)
+    print("itemsize of b:", b.itemsize)
+
+.. parsed-literal::
+
+    a:
+     array([1, 2, 3], dtype=int8)
+    itemsize of a: 1
+    
+    b:
+     array([[1.0, 2.0],
+    	 [3.0, 4.0]], dtype=float)
+    itemsize of b: 8
     
     
 
@@ -458,41 +555,6 @@ consistent with the old, a ``ValueError`` exception will be raised.
     a (2 by 8): array([[1, 2, 3, 4, 5, 6, 7, 8],
     	 [9, 10, 11, 12, 13, 14, 15, 16]], dtype=uint8)
     a (1 by 16): array([1, 2, 3, ..., 14, 15, 16], dtype=uint8)
-    
-    
-
-
-.rawsize
-~~~~~~~~
-
-The ``rawsize`` method of the ``ndarray`` returns a 5-tuple with the
-following data
-
-1. number of rows
-2. number of columns
-3. length of the storage (should be equal to the product of 1. and 2.)
-4. length of the data storage in bytes
-5. datum size in bytes (1 for ``uint8``/``int8``, 2 for
-   ``uint16``/``int16``, and 4, or 8 for ``floats``, see `ndarray, the
-   basic container <#ndarray,-the-basic-container>`__)
-
-**WARNING:** ``rawsize`` is a ``ulab``-only method; it has no equivalent
-in ``numpy``.
-
-.. code::
-        
-    # code to be run in micropython
-    
-    import ulab as np
-    
-    a = np.array([1, 2, 3, 4], dtype=np.float)
-    print("a: \t\t", a)
-    print("rawsize of a: \t", a.rawsize())
-
-.. parsed-literal::
-
-    a: 		 array([1.0, 2.0, 3.0, 4.0], dtype=float)
-    rawsize of a: 	 (1, 4, 4, 16, 4)
     
     
 

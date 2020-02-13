@@ -54,7 +54,6 @@
 #define ULAB_POLY_POLYFIT (1)
 
 //
-#define ULAB_NUMERICAL_ARGSORT (1)
 #define ULAB_NUMERICAL_LINSPACE (1)
 #define ULAB_NUMERICAL_SUM (1)
 #define ULAB_NUMERICAL_MEAN (1)
@@ -67,6 +66,7 @@
 #define ULAB_NUMERICAL_FLIP (1)
 #define ULAB_NUMERICAL_DIFF (1)
 #define ULAB_NUMERICAL_SORT (1)
+#define ULAB_NUMERICAL_ARGSORT (1)
 
 // FFT costs about 2 kB of flash space
 #define ULAB_FFT_FFT (1)
