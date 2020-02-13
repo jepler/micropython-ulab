@@ -58,16 +58,22 @@ void ndarray_assign_elements(mp_obj_array_t *, mp_obj_t , uint8_t , size_t *);
 ndarray_obj_t *create_new_ndarray(size_t , size_t , uint8_t );
 
 mp_obj_t ndarray_copy(mp_obj_t );
+#ifdef CIRCUITPY
 mp_obj_t ndarray_make_new(const mp_obj_type_t *type, size_t n_args, const mp_obj_t *args, mp_map_t *kw_args);
+#else
+mp_obj_t ndarray_make_new(const mp_obj_type_t *, size_t , size_t , const mp_obj_t *);
+#endif
 mp_obj_t ndarray_subscr(mp_obj_t , mp_obj_t , mp_obj_t );
 mp_obj_t ndarray_getiter(mp_obj_t , mp_obj_iter_buf_t *);
 mp_obj_t ndarray_binary_op(mp_binary_op_t , mp_obj_t , mp_obj_t );
 mp_obj_t ndarray_unary_op(mp_unary_op_t , mp_obj_t );
 
 mp_obj_t ndarray_shape(mp_obj_t );
-mp_obj_t ndarray_rawsize(mp_obj_t );
+mp_obj_t ndarray_size(mp_obj_t );
 mp_obj_t ndarray_flatten(size_t , const mp_obj_t *, mp_map_t *);
 mp_int_t ndarray_get_buffer(mp_obj_t obj, mp_buffer_info_t *bufinfo, mp_uint_t flags);
+
+void ndarray_attributes(mp_obj_t , qstr , mp_obj_t *);
 
 #define CREATE_SINGLE_ITEM(outarray, type, typecode, value) do {\
     ndarray_obj_t *tmp = create_new_ndarray(1, 1, (typecode));\
